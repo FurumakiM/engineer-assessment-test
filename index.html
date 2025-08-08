@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エンジニア力量測定テスト - 最適化版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            border: 2px solid #ecf0f1;
+            border-radius: 12px;
+            background: #fafbfc;
+        }
+
+        .section h2 {
+            color: #2980b9;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            font-size: 1.4em;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .question h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .easy { background: #2ecc71; color: white; }
+        .medium { background: #f39c12; color: white; }
+        .hard { background: #e74c3c; color: white; }
+        .expert { background: #9b59b6; color: white; }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .code-editor {
+            background: #2c3e50;
+            color: #ecf0f1;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            min-height: 150px;
+            border: 2px solid #34495e;
+            resize: vertical;
+        }
+
+        .problem-statement {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .constraints {
+            background: #e74c3c;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+            white-space: pre-line;
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 40px auto 0;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .progress-indicator {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 150px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .section-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .progress-indicator {
+                display: none;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .timer {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>エンジニア力量測定テスト</h1>
+            <p>実技中心の総合技術評価 - 制限時間 90分 - 全30問</p>
+            <div class="timer" id="timer">残り時間: 90:00</div>
+        </div>
+
+        <div class="progress-indicator">
+            <div><strong>進捗状況</strong></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div>完了: <span id="answered">0</span>/30問</div>
+            <div>進捗: <span id="progress">0</span>%</div>
+        </div>
+
+        <div class="form-container">
+            <form id="assessmentForm">
+                <!-- 基本情報 -->
+                <div class="section">
+                    <h2>基本情報</h2>
+                    <div class="form-group">
+                        <label for="employeeName">氏名</label>
+                        <input type="text" id="employeeName" name="employeeName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeId">社員ID</label>
+                        <input type="text" id="employeeId" name="employeeId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="primaryLanguage">主要使用言語</label>
+                        <select id="primaryLanguage" name="primaryLanguage" required>
+                            <option value="">選択してください</option>
+                            <option value="javascript">JavaScript/TypeScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="csharp">C#</option>
+                            <option value="go">Go</option>
+                            <option value="rust">Rust</option>
+                            <option value="cpp">C/C++</option>
+                            <option value="kotlin">Kotlin</option>
+                            <option value="swift">Swift</option>
+                            <option value="php">PHP</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="experience">エンジニア経験年数</label>
+                        <select id="experience" name="experience" required>
+                            <option value="">選択してください</option>
+                            <option value="0-1">0-1年</option>
+                            <option value="2-3">2-3年</option>
+                            <option value="4-6">4-6年</option>
+                            <option value="7-10">7-10年</option>
+                            <option value="11+">11年以上</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- セクション1: アルゴリズム・データ構造（10問）-->
+                <div class="section">
+                    <h2>Section 1: アルゴリズム・データ構造</h2>
+                    <div class="section-summary">
+                        <strong>10問 - 配点35% - 推奨時間30分</strong><br>
+                        基礎から高度なアルゴリズム・データ構造の実装と理論の理解を評価
+                    </div>
+
+                    <!-- 問題1: 配列・文字列 -->
+                    <div class="question">
+                        <h3>問題1: 回転配列での最小値検索 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">ソート済み配列が回転された配列で最小値を見つけてください。
+重複要素はありません。O(log n)時間で実装。
+
+例：
+Input: [3,4,5,1,2]  Output: 1
+Input: [4,5,6,7,0,1,2]  Output: 0
+Input: [11,13,15,17]  Output: 11</div>
+                        <label for="q1">実装コード + 時間計算量分析</label>
+                        <textarea id="q1" name="q1" class="code-editor" placeholder="def findMin(nums):
+    # あなたの実装
+    pass
+
+# 時間計算量: O(?)
+# 手法: 二分探索の応用"></textarea>
+                    </div>
+
+                    <!-- 問題2: 動的プログラミング -->
+                    <div class="question">
+                        <h3>問題2: コインチェンジ問題 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">異なる額面のコインを使って、指定金額を作るのに必要な
+最小枚数を求めてください。
+
+例：
+coins = [1, 3, 4], amount = 6  →  2枚 (3+3)
+coins = [2], amount = 3  →  -1 (作れない)</div>
+                        <label for="q2">実装コード + DP表の説明</label>
+                        <textarea id="q2" name="q2" class="code-editor"></textarea>
+                    </div>
+
+                    <!-- 問題3: グラフアルゴリズム -->
+                    <div class="question">
+                        <h3>問題3: 島の数を数える <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">2次元グリッドで、'1'は陸地、'0'は水を表す時、
+島の数を数えてください（DFS/BFS使用）。
+
+例：
+[["1","1","0","0","0"],
+ ["1","1","0","0","0"],
+ ["0","0","1","0","0"],
+ ["0","0","0","1","1"]]  →  3個の島</div>
+                        <label for="q3">実装コード</label>
+                        <textarea id="q3" name="q3" class="code-editor"></textarea>
+                    </div>
+
+                    <!-- 問題4: 文字列アルゴリズム -->
+                    <div class="question">
+                        <h3>問題4: 最長回文部分文字列 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">文字列から最長の回文部分文字列を返してください。
+
+例：
+"babad" → "bab" または "aba"
+"cbbd" → "bb"
+
+効率的なアルゴリズムで実装してください。</div>
+                        <label for="q4">実装コード + アルゴリズム説明</label>
+                        <textarea id="q4" name="q4" class="code-editor"></textarea>
+                    </div>
+
+                    <!-- 問題5: 高度なデータ構造 -->
+                    <div class="question">
+                        <h3>問題5: LRUキャッシュ実装 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">get(key)とput(key,value)の両方をO(1)で実行する
+LRUキャッシュを実装してください。
+
+操作：
+- get(key): 存在すれば値を返し、最近使用に更新
+- put(key, value): 挿入。容量超過時は最古を削除
+
+制約: 1 ≤ capacity ≤ 3000</div>
+                        <label for="q5">実装コード</label>
+                        <textarea id="q5" name="q5" class="code-editor"></textarea>
+                    </div>
+
+                    <!-- 問題6-10: 追加問題 -->
+                    <div class="question">
+                        <h3>問題6: 二分探索木の妥当性検証 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">二分探索木が正しい構造かを判定してください。</div>
+                        <label for="q6">実装コード</label>
+                        <textarea id="q6" name="q6" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題7: トップK頻出要素 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">配列でK個の最頻出要素を返してください。</div>
+                        <label for="q7">実装コード</label>
+                        <textarea id="q7" name="q7" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題8: ワードラダー <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">単語のしりとりのような変換の最短経路を求めてください。</div>
+                        <label for="q8">実装コード</label>
+                        <textarea id="q8" name="q8" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題9: 区間スケジューリング <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">重複しない最大数の区間を選択するアルゴリズムを実装。</div>
+                        <label for="q9">実装コード</label>
+                        <textarea id="q9" name="q9" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題10: Trie（前置木）実装 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">単語の挿入・検索・前置詞検索を実装してください。</div>
+                        <label for="q10">実装コード</label>
+                        <textarea id="q10" name="q10" class="code-editor"></textarea>
+                    </div>
+                </div>
+
+                <!-- セクション2: システム設計（8問） -->
+                <div class="section">
+                    <h2>Section 2: システム設計・アーキテクチャ</h2>
+                    <div class="section-summary">
+                        <strong>8問 - 配点30% - 推奨時間30分</strong><br>
+                        大規模システムの設計能力、スケーラビリティ、可用性の考慮を評価
+                    </div>
+
+                    <div class="question">
+                        <h3>問題11: URL短縮サービス設計 <span class="difficulty medium">Medium</span></h3>
+                        <div class="constraints">要件:
+- 1日1億URL短縮
+- 読み取り：書き込み = 100:1
+- レスポンス100ms以下
+- 短縮URL 7文字
+- 99.9%可用性</div>
+                        <label for="q11">システム設計（アーキテクチャ・DB・API設計）</label>
+                        <textarea id="q11" name="q11" placeholder="1. 高レベルアーキテクチャ図
+2. API設計 (POST /shorten, GET /{shortUrl})
+3. データベーススキーマ
+4. キャッシュ戦略
+5. スケーリング手法"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題12: リアルタイムチャット設計 <span class="difficulty hard">Hard</span></h3>
+                        <div class="constraints">要件:
+- 1億ユーザー、1000万同時接続
+- 1:1、グループチャット
+- オンライン状態
+- メッセージ配信保証
+- メッセージ履歴</div>
+                        <label for="q12">システム設計</label>
+                        <textarea id="q12" name="q12"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題13: 動画ストリーミング設計 <span class="difficulty expert">Expert</span></h3>
+                        <div class="constraints">要件:
+- YouTube規模
+- 複数解像度対応
+- 全世界配信
+- アップロード処理
+- レコメンデーション</div>
+                        <label for="q13">システム設計</label>
+                        <textarea id="q13" name="q13"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題14: 分散キャッシュシステム <span class="difficulty hard">Hard</span></h3>
+                        <div class="constraints">要件:
+- Redis Cluster規模
+- 自動シャーディング
+- レプリケーション
+- フェイルオーバー
+- 一貫性保証</div>
+                        <label for="q14">システム設計</label>
+                        <textarea id="q14" name="q14"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題15: 検索エンジン設計 <span class="difficulty expert">Expert</span></h3>
+                        <div class="constraints">要件:
+- Google規模
+- Webクローリング
+- インデックス化
+- ランキング
+- 検索結果表示</div>
+                        <label for="q15">システム設計</label>
+                        <textarea id="q15" name="q15"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題16: ソーシャルネットワーク設計 <span class="difficulty hard">Hard</span></h3>
+                        <div class="constraints">要件:
+- Facebook規模
+- フレンド機能
+- ニュースフィード
+- 投稿・コメント
+- 通知システム</div>
+                        <label for="q16">システム設計</label>
+                        <textarea id="q16" name="q16"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題17: 配車サービス設計 <span class="difficulty expert">Expert</span></h3>
+                        <div class="constraints">要件:
+- Uber規模
+- 位置情報管理
+- マッチングアルゴリズム
+- リアルタイム追跡
+- 料金計算</div>
+                        <label for="q17">システム設計</label>
+                        <textarea id="q17" name="q17"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題18: 分散ファイルシステム <span class="difficulty expert">Expert</span></h3>
+                        <div class="constraints">要件:
+- Google Drive規模
+- ファイル同期
+- バージョン管理
+- 共有機能
+- 障害耐性</div>
+                        <label for="q18">システム設計</label>
+                        <textarea id="q18" name="q18"></textarea>
+                    </div>
+                </div>
+
+                <!-- セクション3: データベース・パフォーマンス（7問） -->
+                <div class="section">
+                    <h2>Section 3: データベース・パフォーマンス最適化</h2>
+                    <div class="section-summary">
+                        <strong>7問 - 配点20% - 推奨時間20分</strong><br>
+                        SQL最適化、インデックス設計、NoSQL設計、大規模データ処理の専門知識
+                    </div>
+
+                    <div class="question">
+                        <h3>問題19: 複雑なSQL最適化 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">以下のクエリを最適化してください：
+
+SELECT u.name, COUNT(o.id) as orders, 
+       AVG(o.total) as avg_order,
+       MAX(o.created_at) as last_order
+FROM users u 
+LEFT JOIN orders o ON u.id = o.user_id 
+WHERE u.status = 'active' 
+  AND o.created_at >= '2023-01-01'
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 5
+ORDER BY avg_order DESC
+LIMIT 100;
+
+データ規模: users 1000万, orders 1億件</div>
+                        <label for="q19">最適化クエリ + インデックス設計</label>
+                        <textarea id="q19" name="q19" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題20: データベースシャーディング設計 <span class="difficulty expert">Expert</span></h3>
+                        <div class="problem-statement">10億件のユーザーデータを複数DBにシャーディングする戦略を設計してください。</div>
+                        <label for="q20">シャーディング戦略</label>
+                        <textarea id="q20" name="q20"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題21: MongoDB設計 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">Eコマースサイトの商品・注文・ユーザーデータをMongoDBで設計してください。</div>
+                        <label for="q21">MongoDBスキーマ設計</label>
+                        <textarea id="q21" name="q21" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題22: Redis活用戦略 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">高トラフィックWebアプリでのRedis活用戦略を設計してください。</div>
+                        <label for="q22">Redis設計</label>
+                        <textarea id="q22" name="q22"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題23: データウェアハウス設計 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">ビッグデータ分析用DWHをスタースキーマで設計してください。</div>
+                        <label for="q23">DWH設計</label>
+                        <textarea id="q23" name="q23"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題24: 分散トランザクション <span class="difficulty expert">Expert</span></h3>
+                        <div class="problem-statement">マイクロサービス間の分散トランザクションをSagaパターンで設計してください。</div>
+                        <label for="q24">分散トランザクション設計</label>
+                        <textarea id="q24" name="q24"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題25: パフォーマンス分析 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">DBパフォーマンス劣化の原因特定と対策方法を説明してください。</div>
+                        <label for="q25">パフォーマンス分析・対策</label>
+                        <textarea id="q25" name="q25"></textarea>
+                    </div>
+                </div>
+
+                <!-- セクション4: セキュリティ・コード品質（5問） -->
+                <div class="section">
+                    <h2>Section 4: セキュリティ・コード品質</h2>
+                    <div class="section-summary">
+                        <strong>5問 - 配点15% - 推奨時間10分</strong><br>
+                        セキュリティ脆弱性、コードレビュー、設計原則、テスト設計の実践スキル
+                    </div>
+
+                    <div class="question">
+                        <h3>問題26: 脆弱性分析・修正 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">以下のコードの脆弱性を特定・修正してください：
+
+```javascript
+app.post('/login', (req, res) => {
+  const query = `SELECT * FROM users WHERE 
+    username='${req.body.username}' AND 
+    password='${req.body.password}'`;
+  
+  db.query(query, (err, result) => {
+    if (result.length > 0) {
+      res.json({success: true, user: result[0]});
+    } else {
+      res.status(401).json({error: 'Login failed'});
+    }
+  });
+});
+```</div>
+                        <label for="q26">脆弱性分析 + 修正コード</label>
+                        <textarea id="q26" name="q26" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題27: 認証・認可システム設計 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">JWT + OAuth2.0を使った認証・認可システムを設計してください。</div>
+                        <label for="q27">認証システム設計</label>
+                        <textarea id="q27" name="q27"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題28: コードレビュー <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">以下のコードの改善点を指摘し、リファクタリングしてください。</div>
+                        <label for="q28">コードレビュー + リファクタリング</label>
+                        <textarea id="q28" name="q28" class="code-editor"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題29: テスト設計 <span class="difficulty medium">Medium</span></h3>
+                        <div class="problem-statement">APIエンドポイントの包括的なテストケースを設計してください。</div>
+                        <label for="q29">テストケース設計</label>
+                        <textarea id="q29" name="q29"></textarea>
+                    </div>
+
+                    <div class="question">
+                        <h3>問題30: 設計パターン適用 <span class="difficulty hard">Hard</span></h3>
+                        <div class="problem-statement">通知システムにObserverパターンを適用して実装してください。</div>
+                        <label for="q30">設計パターン実装</label>
+                        <textarea id="q30" name="q30" class="code-editor"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">評価を送信（30問完了）</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // タイマー機能（90分）
+        let timeLeft = 90 * 60;
+        const timer = document.getElementById('timer');
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `残り時間: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // 残り10分で警告色に変更
+            if (timeLeft <= 600) {
+                timer.style.background = 'rgba(231, 76, 60, 0.95)';
+            }
+            
+            if (timeLeft <= 0) {
+                alert('制限時間が終了しました。自動的に送信されます。');
+                document.getElementById('assessmentForm').submit();
+                return;
+            }
+            timeLeft--;
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // 進捗追跡
+        function updateProgress() {
+            const textareas = document.querySelectorAll('textarea[id^="q"]');
+            const selects = document.querySelectorAll('select[required]');
+            const textInputs = document.querySelectorAll('input[type="text"][required]');
+            
+            let answered = 0;
+            const totalQuestions = 30;
+            
+            // 必須入力項目のチェック
+            [...selects, ...textInputs].forEach(input => {
+                if (input.value.trim() !== '') {
+                    answered += 0.1; // 基本情報は軽くカウント
+                }
+            });
+            
+            // 問題回答のチェック
+            textareas.forEach(textarea => {
+                if (textarea.value.trim() !== '') {
+                    answered++;
+                }
+            });
+            
+            const progress = Math.round((answered / totalQuestions) * 100);
+            document.getElementById('progress').textContent = progress;
+            document.getElementById('answered').textContent = Math.floor(answered);
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // 入力監視
+        document.addEventListener('input', updateProgress);
+        document.addEventListener('change', updateProgress);
+
+        // 自動保存機能
+        let autoSaveInterval = setInterval(() => {
+            const formData = new FormData(document.getElementById('assessmentForm'));
+            const data = Object.fromEntries(formData.entries());
+            localStorage.setItem('engineerAssessmentDraft', JSON.stringify(data));
+        }, 30000); // 30秒ごと
+
+        // ページ読み込み時に下書き復元
+        window.addEventListener('load', () => {
+            const draft = localStorage.getItem('engineerAssessmentDraft');
+            if (draft && confirm('保存された下書きがあります。復元しますか？')) {
+                const data = JSON.parse(draft);
+                Object.entries(data).forEach(([key, value]) => {
+                    const element = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
+                    if (element) {
+                        element.value = value;
+                    }
+                });
+                updateProgress();
+            }
+        });
+
+        // フォーム送信処理
+        document.getElementById('assessmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const answeredCount = document.querySelectorAll('textarea[id^="q"]').length;
+            let completedCount = 0;
+            
+            document.querySelectorAll('textarea[id^="q"]').forEach(textarea => {
+                if (textarea.value.trim() !== '') completedCount++;
+            });
+            
+            if (completedCount < 20) {
+                if (!confirm(`回答済み: ${completedCount}/30問\n未完了でも送信しますか？`)) {
+                    return;
+                }
+            }
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // メタデータ追加
+            data.timestamp = new Date().toISOString();
+            data.timeSpent = (90 * 60 - timeLeft) + ' seconds';
+            data.completionRate = (completedCount / 30 * 100).toFixed(1) + '%';
+            
+            // 詳細評価計算
+            const evaluation = performComprehensiveEvaluation(data);
+            
+            // 送信
+            submitToGoogleSheets({...data, ...evaluation});
+        });
+
+        // 詳細評価関数
+        function performComprehensiveEvaluation(data) {
+            const scores = {
+                algorithmScore: evaluateAlgorithmSection(data),
+                systemDesignScore: evaluateSystemDesignSection(data),
+                databaseScore: evaluateDatabaseSection(data),
+                securityScore: evaluateSecuritySection(data)
+            };
+            
+            // 重み付き総合スコア
+            const totalScore = (
+                scores.algorithmScore * 0.35 +
+                scores.systemDesignScore * 0.30 +
+                scores.databaseScore * 0.20 +
+                scores.securityScore * 0.15
+            );
+            
+            const level = determineLevel(totalScore, scores, data);
+            
+            return {
+                ...scores,
+                totalScore: Math.round(totalScore),
+                level: level,
+                strengths: identifyStrengths(scores),
+                weaknesses: identifyWeaknesses(scores),
+                recommendations: generateRecommendations(scores, level)
+            };
+        }
+
+        function evaluateAlgorithmSection(data) {
+            let score = 0;
+            let count = 0;
+            
+            // 問題1-10の評価
+            for (let i = 1; i <= 10; i++) {
+                const answer = data[`q${i}`];
+                if (answer && answer.trim()) {
+                    count++;
+                    score += evaluateAlgorithmAnswer(answer, i);
+                }
+            }
+            
+            return count > 0 ? score / count : 0;
+        }
+
+        function evaluateAlgorithmAnswer(answer, questionNum) {
+            const lowerAnswer = answer.toLowerCase();
+            let score = 0;
+            
+            // 基本実装スコア
+            if (answer.length > 50) score += 20;
+            if (answer.length > 150) score += 20;
+            
+            // アルゴリズム特有の評価
+            const algorithmKeywords = {
+                1: ['binary', 'search', 'log', 'mid'],
+                2: ['dp', 'dynamic', 'table', 'min'],
+                3: ['dfs', 'bfs', 'visited', 'recursive'],
+                4: ['palindrome', 'expand', 'center'],
+                5: ['hashmap', 'doubly', 'linked', 'o(1)']
+            };
+            
+            const keywords = algorithmKeywords[questionNum] || [];
+            const foundKeywords = keywords.filter(k => lowerAnswer.includes(k));
+            score += foundKeywords.length * 10;
+            
+            // 計算量への言及
+            if (lowerAnswer.includes('o(') || lowerAnswer.includes('time complexity')) {
+                score += 20;
+            }
+            
+            // コメント・説明の質
+            if (answer.includes('//') || answer.includes('#') || lowerAnswer.includes('解法')) {
+                score += 10;
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function evaluateSystemDesignSection(data) {
+            let score = 0;
+            let count = 0;
+            
+            for (let i = 11; i <= 18; i++) {
+                const answer = data[`q${i}`];
+                if (answer && answer.trim()) {
+                    count++;
+                    score += evaluateSystemDesignAnswer(answer, i);
+                }
+            }
+            
+            return count > 0 ? score / count : 0;
+        }
+
+        function evaluateSystemDesignAnswer(answer, questionNum) {
+            const lowerAnswer = answer.toLowerCase();
+            let score = 0;
+            
+            // 基本構成要素
+            const systemKeywords = [
+                'load balancer', 'database', 'cache', 'api', 'microservice',
+                'cdn', 'queue', 'redis', 'mysql', 'nosql', 'sharding'
+            ];
+            
+            const foundKeywords = systemKeywords.filter(k => lowerAnswer.includes(k));
+            score += Math.min(50, foundKeywords.length * 8);
+            
+            // 設計の詳細度
+            if (answer.length > 200) score += 20;
+            if (answer.length > 500) score += 15;
+            
+            // スケーラビリティへの配慮
+            if (lowerAnswer.includes('scalability') || lowerAnswer.includes('scale')) {
+                score += 15;
+            }
+            
+            return Math.min(100, score);
+        }
+
+        function evaluateDatabaseSection(data) {
+            let score = 0;
+            let count = 0;
+            
+            for (let i = 19; i <= 25; i++) {
+                const answer = data[`q${i}`];
+                if (answer && answer.trim()) {
+                    count++;
+                    score += evaluateDatabaseAnswer(answer, i);
+                }
+            }
+            
+            return count > 0 ? score / count : 0;
+        }
+
+        function evaluateDatabaseAnswer(answer, questionNum) {
+            const lowerAnswer = answer.toLowerCase();
+            let score = 0;
+            
+            const dbKeywords = [
+                'index', 'query', 'optimization', 'join', 'partition',
+                'replica', 'shard', 'nosql', 'mongodb', 'redis'
+            ];
+            
+            const foundKeywords = dbKeywords.filter(k => lowerAnswer.includes(k));
+            score += foundKeywords.length * 12;
+            
+            if (answer.length > 100) score += 20;
+            
+            return Math.min(100, score);
+        }
+
+        function evaluateSecuritySection(data) {
+            let score = 0;
+            let count = 0;
+            
+            for (let i = 26; i <= 30; i++) {
+                const answer = data[`q${i}`];
+                if (answer && answer.trim()) {
+                    count++;
+                    score += evaluateSecurityAnswer(answer, i);
+                }
+            }
+            
+            return count > 0 ? score / count : 0;
+        }
+
+        function evaluateSecurityAnswer(answer, questionNum) {
+            const lowerAnswer = answer.toLowerCase();
+            let score = 0;
+            
+            const secKeywords = [
+                'sql injection', 'xss', 'authentication', 'authorization',
+                'jwt', 'oauth', 'hash', 'salt', 'https', 'encryption'
+            ];
+            
+            const foundKeywords = secKeywords.filter(k => lowerAnswer.includes(k));
+            score += foundKeywords.length * 15;
+            
+            if (answer.length > 100) score += 25;
+            
+            return Math.min(100, score);
+        }
+
+        function determineLevel(totalScore, scores, data) {
+            let level = 1;
+            
+            if (totalScore >= 85) level = 5;
+            else if (totalScore >= 70) level = 4;
+            else if (totalScore >= 55) level = 3;
+            else if (totalScore >= 40) level = 2;
+            
+            // 経験年数による調整
+            const exp = data.experience;
+            if (exp === '0-1' && level > 2) level = 2;
+            if (exp === '11+' && level < 3) level = Math.min(level + 1, 5);
+            
+            // バランスチェック
+            const sectionScores = Object.values(scores);
+            const minScore = Math.min(...sectionScores);
+            if (minScore < 35 && level > 2) level--;
+            
+            return level;
+        }
+
+        function identifyStrengths(scores) {
+            return Object.entries(scores)
+                .filter(([area, score]) => score >= 75)
+                .map(([area, score]) => area);
+        }
+
+        function identifyWeaknesses(scores) {
+            return Object.entries(scores)
+                .filter(([area, score]) => score < 50)
+                .map(([area, score]) => area);
+        }
+
+        function generateRecommendations(scores, level) {
+            const recommendations = [];
+            
+            if (scores.algorithmScore < 60) {
+                recommendations.push('アルゴリズム・データ構造の基礎強化');
+            }
+            if (scores.systemDesignScore < 60) {
+                recommendations.push('システム設計経験の積み重ね');
+            }
+            if (scores.databaseScore < 60) {
+                recommendations.push('データベース最適化スキル向上');
+            }
+            if (scores.securityScore < 60) {
+                recommendations.push('セキュリティ知識の体系的学習');
+            }
+            
+            if (level >= 4) {
+                recommendations.push('技術リーダーシップ・メンタリングスキル向上');
+            }
+            
+            return recommendations;
+        }
+
+        function submitToGoogleSheets(data) {
+            const webAppUrl = 'https://script.google.com/macros/s/{YOUR_DEPLOYMENT_ID}/exec';
+            
+            // ローディング表示
+            const btn = document.querySelector('.submit-btn');
+            btn.textContent = '送信中...';
+            btn.disabled = true;
+            
+            fetch(webAppUrl, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // 下書きを削除
+                    localStorage.removeItem('engineerAssessmentDraft');
+                    clearInterval(autoSaveInterval);
+                    
+                    alert(`🎉 評価が正常に送信されました！
+
+📊 結果サマリー:
+• 総合レベル: Level ${data.level}
+• 総合スコア: ${data.totalScore}点
+• 完答率: ${data.completionRate}
+• 所要時間: ${Math.round((90*60 - timeLeft)/60)}分
+
+📈 強み: ${data.strengths.join(', ') || 'バランス良好'}
+📉 改善点: ${data.weaknesses.join(', ') || 'なし'}
+
+結果詳細は1週間以内にフィードバックセッションでお伝えします。`);
+                    
+                    // フォームを無効化
+                    document.getElementById('assessmentForm').style.opacity = '0.5';
+                    document.querySelectorAll('input, textarea, select, button').forEach(el => {
+                        el.disabled = true;
+                    });
+                } else {
+                    throw new Error(result.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('⚠️ 送信エラーが発生しました。\nネットワーク接続を確認して再試行してください。');
+                
+                btn.textContent = '評価を送信（30問完了）';
+                btn.disabled = false;
+            });
+        }
+
+        // 初期化
+        updateTimer();
+        updateProgress();
+    </script>
+</body>
+</html>
